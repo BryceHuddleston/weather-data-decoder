@@ -1,0 +1,21 @@
+1. Be able to call find_wind_in_observation()
+
+2. Be able to pull out the wind section of the observation "METAR KGNT 121815Z AUTO 34013G16KT 10SM CLR 12/M04 A3043 RMK AO2 T01231040="
+
+3. Be able to pull out the wind section of the observation "METAR KJSO 121815Z AUTO 33007G15KT 10SM CLR 18/10 A3019 RMK AO2 T01910098="
+
+4. Have the find_wind_in_observation be able to find the wind_direction in the observation
+
+5. Have the find_wind_in_observation be able to find the wind_speed in the observation
+
+6. Have the find_wind_in_observation be able to find the gust_speed in the observation
+
+7. Have the find_wind_in_observation make gust_speed None if there is no gust speed in the observation
+
+8. Have the find_wind_in_observation be able to find the wind_unit in the observation when the unit is KT
+
+9. Have the find_wind_in_observation be able to find the wind_unit in the observation when the unit is MPS
+
+10. Have the find_wind_in_observation be able to find the wind_direction when it has VRB in the wind section
+
+11. Have the find_wind_in_observation be able to find the wind_direction and wind_speed when they are "00000"
