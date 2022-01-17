@@ -4,6 +4,8 @@ wind_direction = None
 wind_speed = None
 gust_speed = None
 wind_unit = None
+extreme_clockwise_wind_direction = None
+extreme_counterclockwise_wind_direction = None
 
 
 def find_icao_in_observation(observation):
@@ -32,13 +34,24 @@ def find_wind_in_observation(observation):
     global wind_speed
     global gust_speed
     global wind_unit
+    global extreme_clockwise_wind_direction
+    global extreme_counterclockwise_wind_direction
+    global extremes
 
     x = re.match(
-        "(METAR|SPECI|LWIS)?( COR)? ?([A-Z]{4} )(\d+)Z (AUTO )?(.+)(KT|MPS)", observation)
+        "(METAR|SPECI|LWIS)?( COR)? ?([A-Z]{4} )(\d+)Z (AUTO )?(.+)(KT|MPS) (.+ )?(.+)(SM)", observation)
     wind_section = x.group(6)
 
     wind_direction = wind_section[:3]
     wind_unit = x.group(7)
+
+    if x.group(8) == None:
+        extreme_counterclockwise_wind_direction = "None"
+        extreme_clockwise_wind_direction = "None"
+    else:
+        extremes = str(x.group(8)).strip().split("V")
+        extreme_counterclockwise_wind_direction = extremes[0]
+        extreme_clockwise_wind_direction = extremes[1]
 
     if "G" in wind_section:
         speeds = wind_section.split("G")
