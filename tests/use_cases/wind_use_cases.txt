@@ -19,3 +19,13 @@
 10. Have the find_wind_in_observation be able to find the wind_direction when it has VRB in the wind section
 
 11. Have the find_wind_in_observation be able to find the wind_direction and wind_speed when they are "00000"
+
+12. Have the find_wind_in_observation be able to find the group after the wind group.
+
+13. Have the find_wind_in_observation look through the group after the wind group and be able to tell if there is a "V" in it
+
+14. Be able to find the extreme counterclockwise direction of a variable wind, reported with reference to true
+north and rounded off to the nearest 10°
+
+15. Be able to find the extreme clockwise direction of a variable wind, reported with reference to true north
+and rounded off to the nearest 10°. 

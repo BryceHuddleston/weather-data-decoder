@@ -76,3 +76,18 @@ def test_find_gust_speed_when_over_99():
         "METAR KJSO 121815Z AUTO 330107G119MPS 10SM CLR 18/10 A3019 RMK AO2 T01910098=")
 
     assert main.gust_speed == "119"
+
+
+def test_find_wind_maxes():
+    main.find_wind_in_observation(
+        "METAR KABC 121755Z AUTO 21016G24KT 180V240 1SM R11/P6000FT -RA BR BKN015 OVC025 06/04 A2990 RMK AO2 PK WND 20032/25 WSHFT 1715 VIS 3/4V1 1/2 VIS 3/4 RWY11 RAB07 CIG 013V017 CIG 017 RWY11 PRESFR SLP125 P0003 60009 T00640036 10066 21012 58033 TSNO $")
+
+    assert main.extreme_clockwise_wind_direction == "240"
+    assert main.extreme_counterclockwise_wind_direction == "180"
+
+
+def test_when_there_is_no_wind_maxes():
+    main.find_wind_in_observation(
+        "METAR KABC 121755Z AUTO 21016G24KT 1SM R11/P6000FT -RA BR BKN015 OVC025 06/04 A2990 RMK AO2 PK WND 20032/25 WSHFT 1715 VIS 3/4V1 1/2 VIS 3/4 RWY11 RAB07 CIG 013V017 CIG 017 RWY11 PRESFR SLP125 P0003 60009 T00640036 10066 21012 58033 TSNO $")
+    assert main.extreme_clockwise_wind_direction == "None"
+    assert main.extreme_counterclockwise_wind_direction == "None"

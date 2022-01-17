@@ -1,0 +1,64 @@
+            windgrp = None
+            winddir = None
+            windspd = 0
+            windgust = 0
+            varwinddir1 = None
+            varwinddir2 = None
+            windunits = None
+            # Wind group
+            timevalidautocor = re.findall(
+                f"({timevalid}Z)( AUTO| COR)?", metar)[0]
+            if not timevalidautocor:
+                obserrors.append([metar, rawfile])
+                continue
+            if timevalidautocor:
+                timevalidautocor = timevalidautocor[0] + timevalidautocor[1]
+          #     print(timevalidautocor,len(timevalidautocor),type(timevalidautocor))
+                matchobj1 = re.search(
+                    f"{timevalidautocor} (VRB\d{{2,3}}\S+) ", metar)
+                matchobj2 = re.search(
+                    f"{timevalidautocor} (\d{{5,6}}\S+) ", metar)
+          #     print(matchobj1, matchobj2)
+                if matchobj1:
+                    windgrp = matchobj1.groups()[0]
+                if matchobj2:
+                    windgrp = matchobj2.groups()[0]
+                if windgrp:
+                    windunits = re.search("(KT|MPS)", windgrp)
+                    if windunits:
+                        windunits = windunits.groups()[0]
+                    else:
+                        obserrors.append([metar, rawfile])
+                        msg = f"These are some strange wind units in the wind group: {windgrp}!"
+                        print(msg)
+                    if re.search("G\d{2,3}", windgrp):
+                        if matchobj1:
+                          # print(windgrp)
+                            winddir, windspeed, windgust = re.findall(
+                                "(VRB)(\d{2,3})/?G(\d{2,3})", windgrp)[0]
+                        else:
+                            winddir, windspeed, windgust = re.findall(
+                                "(\d{3})(\d{2,3})/?G(\d{2,3})", windgrp)[0]
+                    else:
+                        #  print(windgrp)
+                        if matchobj1:
+                            winddir, windspeed = re.findall(
+                                "(VRB)(\d{2,3})", windgrp)[0]
+                        else:
+                            winddir, windspeed = re.findall(
+                                "(\d{3})(\d{2,3})", windgrp)[0]
+                    windspeed, windgust = map(int, [windspeed, windgust])
+               # else:
+                #    obserrors.append([metar,rawfile])
+                 #   msg = f"Where's the wind group in this surface observation!?: {metar}"
+                  #  print(msg)
+
+                if re.match(f".+{windgrp} \d{{3}}V\d{{3}}", metar):
+                    varwinddir1, varwinddir2 = re.findall(
+                        f"{windgrp} (\d{{3}})V(\d{{3}})", metar)[0]
+                    windgrp = f"{windgrp} {varwinddir1}V{varwinddir2}"
+
+            # Peak wind
+            if re.match(".+RMK.+ PK WIND", metar):
+                pdwinddir, pkwindspd, pkwindtime = re.findall(
+                    "PK WND (\d{3})(\d{2,3})/(\d{2,4})", metar)[0]
